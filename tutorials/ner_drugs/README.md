@@ -25,6 +25,14 @@ Commands are only re-run if their inputs have changed.
 | `visualize-model` | Visualize the model's output interactively using Streamlit |
 | `visualize-data` | Explore the annotated data in an interactive Streamlit app |
 
+#### WANDB Specific Commands
+
+| Command | Description |
+| --- | --- |
+| `train-search` | Hyperparameter optimize named entity recognition models via W&B Sweeps  |
+| `wandb-evaluate` | Evaluate all W&B logged models and store details in a Table |
+| `wandb-promote` | Package and log the best trained model so it can be installed for deployment via W&B |
+
 ### ⏭ Workflows
 
 The following workflows are defined by the project. They
@@ -35,6 +43,7 @@ inputs have changed.
 | Workflow | Steps |
 | --- | --- |
 | `all` | `preprocess` &rarr; `train` &rarr; `evaluate` |
+| `wandb-parameter-search` | `preprocess` &rarr; `train-search` &rarr; `wandb-evaluate` &rarr; `wandb-promote` |
 
 ### 🗂 Assets
 
