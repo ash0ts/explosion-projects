@@ -32,7 +32,7 @@ assets:
 # run them via "spacy project run [workflow]". If a commands's inputs/outputs
 # haven't changed, it won't be re-run.
 workflows:
-  original:
+  all:
     - preprocess
     - train
     - evaluate
