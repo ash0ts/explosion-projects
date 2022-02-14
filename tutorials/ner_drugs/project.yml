@@ -32,11 +32,15 @@ assets:
 # run them via "spacy project run [workflow]". If a commands's inputs/outputs
 # haven't changed, it won't be re-run.
 workflows:
-  all:
+  original:
     - preprocess
     - train
     - evaluate
-
+  wandb-parameter-search:
+    - preprocess
+    - train-search
+    - wandb-evaluate
+    - wandb-promote
 # Project commands, specified in a style similar to CI config files (e.g. Azure
 # pipelines). The name is the command name that lets you trigger the command
 # via "spacy project run [command] [path]". The help message is optional and
@@ -64,6 +68,25 @@ commands:
       - "corpus/${vars.dev}.spacy"
     outputs:
       - "training/model-best"
+
+  - name: "train-search"
+    help: "Run customized training runs for hyperparameter search using [Weights & Biases Sweeps](https://docs.wandb.ai/guides/sweeps)"
+    script:
+      - "python ./scripts/sweeps_using_code.py configs/${vars.config} training/"
+    deps:
+      - "corpus/${vars.train}.spacy"
+      - "corpus/${vars.dev}.spacy"
+      - "configs/"
+
+  - name: "wandb-evaluate"
+    help: "Evaluate the model and export metrics to wandb"
+    script:
+      - "python ./scripts/wandb_evaluate.py"
+
+  - name: "wandb-promote"
+    help: "Evaluate the model and export metrics to wandb"
+    script:
+      - "python ./scripts/wandb_promotion.py ./scripts/configs/promote.yaml ./scripts/deployment"
 
   - name: "evaluate"
     help: "Evaluate the model and export metrics"

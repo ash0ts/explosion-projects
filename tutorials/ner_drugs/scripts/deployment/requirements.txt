@@ -1,0 +1,4 @@
+python-dotenv==0.19.2
+wandb==0.12.10
+spacy==3.2.1
+typer==0.4.0

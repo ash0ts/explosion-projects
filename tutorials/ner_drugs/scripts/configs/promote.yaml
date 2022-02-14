@@ -1,0 +1,5 @@
+deployment:
+  environment: "production"  
+weights:
+  speed: 0.1
+  ents_f: 0.9
