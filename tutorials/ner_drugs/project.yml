@@ -79,12 +79,12 @@ commands:
       - "configs/"
 
   - name: "wandb-evaluate"
-    help: "Evaluate the model and export metrics to wandb"
+    help: "Evaluate all W&B logged models and store details in a [Weights & Biases Table](https://docs.wandb.ai)"
     script:
       - "python ./scripts/wandb_evaluate.py"
 
   - name: "wandb-promote"
-    help: "Evaluate the model and export metrics to wandb"
+    help: "Package and log the best trained model so it can be installed for deployment via [Weights & Biases](https://docs.wandb.ai)"
     script:
       - "python ./scripts/wandb_promotion.py ./scripts/configs/promote.yaml ./scripts/deployment"
 
