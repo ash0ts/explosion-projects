@@ -8,6 +8,7 @@ import typer
 import wandb
 from dotenv import find_dotenv, load_dotenv
 from spacy.cli.evaluate import evaluate
+from tqdm import tqdm
 
 from utils import flatten_dict
 
@@ -30,7 +31,7 @@ def main(eval_dataset_name: str = "drugs_eval"):
 
     # TODO: Add args for filtering like based on time date
     table_data = []
-    for candidate_run in candidate_runs:
+    for candidate_run in tqdm(candidate_runs):
         has_model = False
         alias = "latest"
 
