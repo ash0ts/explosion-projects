@@ -20,13 +20,14 @@ def main(
 ):
     config = load_config(config_path)
 
-    ENV_TYPE = config.get("deployment.environment", "production")
+    ENV_TYPE = config.get("deployment.environment", "deployable-models")
 
-    run = wandb.init(project=WANDB_PROJECT_NAME,
-                     name="promote_candidate_model", config=config)
+    run = wandb.init(project=WANDB_PROJECT_NAME, job_type="promote", tags=[
+                     "spacy", "ner", "promote", "drugs"], name=f"promote-drug-ner-spacy-model", config=config)
+
     # Hardcoding the name of the registry for workflow consistency
     candidate_model_evals_table = run.use_artifact(
-        "candidate_models:latest").get("candidate_evals")
+        "draft-drug-ner-spacy-models:latest").get("candidate_evals")
     eval_metrics_df = pd.DataFrame(
         candidate_model_evals_table.data, columns=candidate_model_evals_table.columns)
 
@@ -72,11 +73,11 @@ def main(
         promoted_candidate_model_artifact_path, promoted_candidate_model_name)
 
     promoted_model_artifact = wandb.Artifact(
-        "promoted_model", ENV_TYPE, metadata=promoted_candidate_model_details.to_dict())
+        "drug-ner-spacy-model", ENV_TYPE, metadata=promoted_candidate_model_details.to_dict())
     promoted_model_artifact.add_dir(
-        promoted_candidate_model_path, name="promoted_model")
+        promoted_candidate_model_path, name="model")
     # TODO: Take p
-    promoted_model_artifact.add_dir(deployment_dir, name="deployment")
+    promoted_model_artifact.add_dir(deployment_dir, name="deployment_assets")
     run.log_artifact(promoted_model_artifact)
 
     run.finish()

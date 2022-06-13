@@ -15,12 +15,14 @@ WANDB_PROJECT_NAME = os.environ.get("WANDB_PROJECT_NAME")
 def main(default_config: Path, output_path: Path):
     def train_spacy():
         loaded_local_config = util.load_config(default_config)
-        with wandb.init() as run:
-            sweeps_config = Config(util.dot_to_dict(run.config))
-            merged_config = Config(loaded_local_config).merge(sweeps_config)
-            nlp = init_nlp(merged_config)
-            output_path.mkdir(parents=True, exist_ok=True)
-            train(nlp, output_path, use_gpu=True)
+        run = wandb.init(project=WANDB_PROJECT_NAME, job_type="train", tags=[
+                         "spacy", "ner", "train", "drugs"], name=f"train-drug-ner-spacy-model")
+        sweeps_config = Config(util.dot_to_dict(run.config))
+        merged_config = Config(loaded_local_config).merge(sweeps_config)
+        nlp = init_nlp(merged_config)
+        output_path.mkdir(parents=True, exist_ok=True)
+        train(nlp, output_path, use_gpu=True)
+        run.finish()
 
     sweep_config = {"method": "bayes"}
     metric = {"name": "ents_f", "goal": "maximize"}

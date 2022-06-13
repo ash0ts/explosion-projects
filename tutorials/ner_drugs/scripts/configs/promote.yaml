@@ -1,5 +1,5 @@
 deployment:
-  environment: "production"  
+  environment: "deployable-models"  
 weights:
   speed: 0.1
   ents_f: 0.9

@@ -23,8 +23,9 @@ def main(eval_dataset_name: str = "drugs_eval"):
 
     api = wandb.Api()
     candidate_runs = api.runs(WANDB_ENTITY + "/" + WANDB_PROJECT_NAME)
-    run = wandb.init(project=WANDB_PROJECT_NAME,
-                     name="evaluate-models", job_type="evaluation")
+    config = {}
+    run = wandb.init(project=WANDB_PROJECT_NAME, job_type="eval", tags=[
+                     "spacy", "ner", "eval", "drugs"], name=f"evaluate-drug-ner-spacy-model", config=config)
     eval_dataset_art = run.use_artifact("dataset:latest").get_path(
         f"dataset/{eval_dataset_name}.spacy")
     eval_data_path = eval_dataset_art.download()
@@ -78,7 +79,7 @@ def main(eval_dataset_name: str = "drugs_eval"):
             table_data.append(flatten_dict(metrics))
 
     candidate_model_registry = wandb.Artifact(
-        "candidate_models", type="model_registry")
+        "draft-drug-ner-spacy-models", type="draft-models")
     candidate_model_evaluation_table = wandb.Table(
         dataframe=pd.DataFrame(table_data))
     candidate_model_registry.add(
