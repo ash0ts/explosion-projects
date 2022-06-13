@@ -38,7 +38,7 @@ def main(default_config: Path, output_path: Path):
     }
     sweep_config["parameters"] = parameters_dict
     sweep_id = wandb.sweep(sweep_config, project=WANDB_PROJECT_NAME)
-    wandb.agent(sweep_id, train_spacy, count=20)
+    wandb.agent(sweep_id, train_spacy, count=5)
 
 
 if __name__ == "__main__":
