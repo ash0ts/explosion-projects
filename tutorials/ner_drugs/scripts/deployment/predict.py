@@ -35,7 +35,7 @@ class Request(BaseModel):
 
 class Response(BaseModel):
     text: str
-    entities: list[dict]
+    entities: List[Dict]
 
 
 def main(txt: str):
